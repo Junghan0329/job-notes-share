@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>취업 준비 노트 | 숫자로 보는 나의 취업 준비</title>
+<meta name="description" content="매일 10초 입력으로 취업 준비를 숫자와 그래프로 보여주는 웹 서비스 소개 페이지 (과제 제출용, 샘플 데이터 데모 포함)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fbf4e6; --paper2:#f3e6cc; --card:#fffaf0; --ink:#2a2017; --ink2:#6b5a47;
+  --orange:#ef8a2f; --mustard:#f4c34d; --mint:#4fae9c; --red:#d9533d; --pink:#f6b3a8; --sky:#9ccbe0;
+  --c1:#4f7cac; --c2:#5aa17f; --c3:#ef8a2f; --c4:#d9533d; --c5:#d6a519;
+  --shadow:5px 5px 0 var(--ink);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:74px}
+body{background:var(--paper);background-image:radial-gradient(rgba(42,32,23,.07) 1.2px,transparent 1.2px);background-size:22px 22px;color:var(--ink);font-family:'Noto Sans KR','Malgun Gothic',sans-serif;font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.jua{font-family:'Jua','Noto Sans KR',sans-serif;font-weight:400;letter-spacing:-.01em}
+a{color:inherit}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+
+.top{position:sticky;top:0;z-index:50;background:var(--paper);border-bottom:3px solid var(--ink)}
+.top .wrap{display:flex;align-items:center;gap:14px;height:58px;overflow-x:auto;scrollbar-width:none}
+.top .wrap::-webkit-scrollbar{display:none}
+.brand{font-family:'Jua';font-size:19px;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.brand i{width:22px;height:22px;border:3px solid var(--ink);border-radius:50%;background:var(--orange);display:inline-block}
+.top nav{display:flex;gap:6px;margin-left:auto}
+.top nav a{white-space:nowrap;text-decoration:none;font-size:13.5px;font-weight:700;padding:5px 11px;border:2px solid transparent;border-radius:99px}
+.top nav a:hover{border-color:var(--ink)}
+.top nav a.on{background:var(--ink);color:var(--paper)}
+
+section.ch{padding:64px 0 6px}
+.ch-head{display:flex;align-items:center;gap:16px;margin-bottom:10px}
+.num{flex:none;width:54px;height:54px;border-radius:50%;background:var(--orange);border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink);display:grid;place-items:center;font-family:'Jua';font-size:24px}
+.ch-head h2{font-size:34px;line-height:1.15}
+.lead{font-size:19px;font-weight:700;margin:0 0 22px 70px;color:var(--ink2)}
+.card{background:var(--card);border:3px solid var(--ink);border-radius:16px;box-shadow:var(--shadow);padding:20px}
+.grid{display:grid;gap:20px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.pill{display:inline-block;border:2px solid var(--ink);border-radius:99px;padding:2px 12px;font-size:13px;font-weight:700;background:#fff}
+.pill.o{background:var(--mustard)}.pill.m{background:var(--mint);color:#fff}.pill.r{background:var(--red);color:#fff}
+.cap{font-size:13px;color:var(--ink2);margin-top:10px}
+.tag{font-size:12px;font-weight:700;background:var(--pink);border:2px solid var(--ink);border-radius:6px;padding:0 6px;margin-left:6px;white-space:nowrap}
+
+/* 표지 */
+.cover{padding:46px 0 10px}
+.cover-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center}
+.kicker{display:inline-block;background:var(--ink);color:var(--paper);font-weight:700;font-size:14px;padding:4px 14px;border-radius:99px;margin-bottom:16px}
+.cover h1{font-size:72px;line-height:1.06;margin-bottom:14px}
+.cover h1 span{background:linear-gradient(transparent 62%,var(--mustard) 62%)}
+.cover p.sub{font-size:20px;font-weight:700;color:var(--ink2)}
+.hero{background:var(--mustard);border:3px solid var(--ink);border-radius:26px;box-shadow:8px 8px 0 var(--ink);padding:14px;position:relative}
+.hero svg{display:block;width:100%;height:auto}
+.stamp{position:absolute;right:-12px;top:-16px;transform:rotate(8deg);background:var(--red);color:#fff;border:3px solid var(--ink);border-radius:10px;padding:4px 12px;font-family:'Jua';font-size:18px}
+.chips4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px}
+.chip{background:var(--card);border:3px solid var(--ink);border-radius:14px;box-shadow:4px 4px 0 var(--ink);padding:12px 14px;text-align:center}
+.chip b{display:block;font-family:'Jua';font-size:30px;line-height:1.1}
+.chip span{font-size:13px;font-weight:700;color:var(--ink2)}
+.docinfo{margin-top:22px;display:grid;grid-template-columns:repeat(4,1fr);border:3px solid var(--ink);border-radius:12px;background:#fff;overflow:hidden}
+.docinfo div{padding:10px 14px;border-right:2px solid var(--ink);font-size:13.5px}
+.docinfo div:last-child{border-right:0}
+.docinfo small{display:block;color:var(--ink2);font-weight:700;font-size:12px}
+
+/* 조건 */
+.req{padding:0;overflow:hidden}
+.req .cond{background:var(--paper2);border-bottom:3px solid var(--ink);padding:12px 16px;font-weight:700;font-size:14px;display:flex;align-items:center;gap:10px}
+.req .cond svg{width:26px;height:26px;flex:none}
+.req .sol{padding:16px}
+.req .sol h3{font-size:25px;line-height:1.2;margin-bottom:8px}
+.req .sol .tags{display:flex;flex-wrap:wrap;gap:6px}
+
+/* 데모 */
+.demo-ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:18px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:3px solid var(--ink);border-radius:12px;background:#fff;padding:7px 16px;font-family:'Jua';font-size:17px;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--paper)}
+.demo-ctl .sp{margin-left:auto}
+.stage{display:flex;justify-content:center}
+.frame{width:100%;max-width:410px;border:4px solid var(--ink);border-radius:36px;background:var(--ink);padding:10px;box-shadow:var(--shadow);transition:max-width .25s}
+.frame iframe{display:block;width:100%;height:780px;border:0;border-radius:26px;background:var(--paper)}
+.frame.pc{max-width:1040px;border-radius:18px;padding:10px 10px}
+.frame.pc iframe{border-radius:10px;height:760px}
+
+/* 화면 구조 */
+.wf{padding:14px}
+.wf h3{font-size:21px;margin:8px 0 2px}
+.wf p{font-size:13.5px;color:var(--ink2);font-weight:500}
+.wf svg{display:block;width:100%;height:auto}
+
+/* 흐름 */
+.flow{display:grid;grid-template-columns:1fr 36px 1fr 36px 1fr 36px 1fr;align-items:stretch}
+.flow .arrow{display:grid;place-items:center;font-family:'Jua';font-size:30px}
+.st{background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px 10px;text-align:center}
+.st b{display:grid;place-items:center;width:34px;height:34px;margin:0 auto 6px;border-radius:50%;background:var(--orange);border:3px solid var(--ink);font-family:'Jua';font-weight:400;font-size:18px}
+.st strong{display:block;font-family:'Jua';font-weight:400;font-size:19px}
+.st span{font-size:13px;color:var(--ink2);font-weight:500}
+.st.end{background:var(--mustard)}
+.timer{margin-top:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.hook{padding:16px;text-align:center}
+.hook svg{width:84px;height:84px}
+.hook h3{font-size:20px;margin:4px 0 2px}
+.hook p{font-size:13.5px;color:var(--ink2);font-weight:500}
+
+/* 지표 */
+.fm{padding:16px}
+.fm h3{font-size:20px;margin-bottom:8px}
+.fm .eq{font-family:'Jua';font-size:20px;background:var(--paper2);border:2.5px dashed var(--ink);border-radius:10px;padding:10px 12px;line-height:1.35}
+.fm .ex{margin-top:10px;font-size:14px;font-weight:700}
+.fm .ex i{font-style:normal;color:var(--orange)}
+.mini{display:flex;height:22px;border:3px solid var(--ink);border-radius:8px;overflow:hidden;background:#fff;margin-top:10px}
+.mini i{display:block;height:100%;border-right:3px solid var(--ink)}
+.mini i:last-child{border-right:0}
+
+/* 저장 구조 */
+.dflow{display:grid;grid-template-columns:1fr 40px 1.1fr 40px 1fr;align-items:center;gap:0}
+.box{background:#fff;border:3px solid var(--ink);border-radius:14px;padding:14px;text-align:center}
+.box h3{font-size:19px;margin-bottom:6px}
+.box .it{font-size:13px;font-weight:700;background:var(--paper2);border:2px solid var(--ink);border-radius:8px;padding:2px 8px;margin:4px 0}
+.dflow .arrow{display:grid;place-items:center;font-family:'Jua';font-size:30px}
+.box.db{background:var(--mustard)}
+
+/* 결정 */
+.tl{display:grid;grid-template-columns:repeat(5,1fr);gap:14px 10px}
+.tl .it{background:#fff;border:3px solid var(--ink);border-radius:12px;padding:10px 8px;text-align:center}
+.tl .it b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--orange);border:2.5px solid var(--ink);font-family:'Jua';font-weight:400;font-size:14px;margin:0 auto 4px}
+.tl .it span{display:block;font-size:12px;color:var(--ink2);font-weight:700}
+.tl .it strong{font-size:14px}
+.tl .it.me{background:var(--mustard)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:13.5px;font-weight:700}
+.legend span::before{content:'';display:inline-block;width:14px;height:14px;border:2.5px solid var(--ink);border-radius:4px;margin-right:6px;vertical-align:-2px;background:#fff}
+.legend span.y::before{background:var(--mustard)}
+
+/* 한계 */
+.ck{padding:18px}
+.ck h3{font-size:21px;margin-bottom:10px}
+.ck li{list-style:none;padding:6px 0 6px 34px;position:relative;font-weight:700;font-size:15px;border-bottom:2px dashed rgba(42,32,23,.25)}
+.ck li:last-child{border-bottom:0}
+.ck li::before{content:'';position:absolute;left:0;top:7px;width:22px;height:22px;border-radius:50%;border:3px solid var(--ink);background:var(--mint)}
+.ck li::after{content:'✓';position:absolute;left:0;top:7px;width:22px;line-height:22px;text-align:center;font-size:14px;color:#fff;font-weight:900}
+.ck.q li::before{background:#fff}
+.ck.q li::after{content:'?';color:var(--red)}
+
+footer{margin-top:70px;border-top:3px solid var(--ink);background:var(--paper2);padding:28px 0 40px;font-size:13.5px}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr;gap:30px}
+footer h4{font-family:'Jua';font-weight:400;font-size:18px;margin-bottom:6px}
+footer p{color:var(--ink2);margin-top:4px}
+
+@media (max-width:900px){
+  .cover-grid{grid-template-columns:1fr}.cover h1{font-size:52px}
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr}
+  .chips4,.docinfo{grid-template-columns:1fr 1fr}
+  .docinfo div:nth-child(2){border-right:0}.docinfo div:nth-child(-n+2){border-bottom:2px solid var(--ink)}
+  .flow{grid-template-columns:1fr}.flow .arrow{transform:rotate(90deg);height:34px}
+  .dflow{grid-template-columns:1fr}.dflow .arrow{transform:rotate(90deg);height:34px}
+  .tl{grid-template-columns:repeat(3,1fr)}
+  footer .wrap{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  section.ch{padding-top:48px}.ch-head h2{font-size:27px}.num{width:44px;height:44px;font-size:20px}
+  .lead{margin-left:0;font-size:16.5px}.cover h1{font-size:42px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .tl{grid-template-columns:repeat(2,1fr)}
+  .top nav{display:none}
+  .demo-ctl .sp{margin-left:0}
+  .frame iframe{height:700px}
+  #size{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><i></i>취업 준비 노트</div>
+    <nav id="nav">
+      <a href="#cover">소개</a><a href="#req">조건</a><a href="#demo">써보기</a><a href="#screens">화면</a>
+      <a href="#daily">매일 흐름</a><a href="#metrics">지표</a><a href="#data">저장</a><a href="#decide">결정</a><a href="#limits">한계</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- 표지 -->
+<section class="cover" id="cover">
+  <div class="cover-grid">
+    <div>
+      <span class="kicker">취업 준비 정량 사이트 · 과제 제출용</span>
+      <h1>취업 준비<br><span>노트</span></h1>
+      <p class="sub">매일 10초 입력.<br>숫자와 그래프로 보는 나의 준비.</p>
+    </div>
+    <div class="hero">
+      <span class="stamp">샘플 데모</span>
+      <svg viewBox="0 0 360 300" role="img" aria-label="막대 그래프가 그려진 노트와 연필">
+        <circle cx="180" cy="150" r="132" fill="#fbe6aa" stroke="#2a2017" stroke-width="4"/>
+        <g stroke="#2a2017" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+          <rect x="82" y="46" width="196" height="216" rx="14" fill="#fffaf0"/>
+          <path d="M82 80 H278" fill="none" stroke-width="3" stroke-opacity=".35"/>
+          <rect x="106" y="62" width="70" height="10" rx="5" fill="#f4c34d" stroke-width="3"/>
+          <rect x="106" y="100" width="26" height="98" rx="4" fill="#4f7cac" stroke-width="4"/>
+          <rect x="140" y="132" width="26" height="66" rx="4" fill="#5aa17f" stroke-width="4"/>
+          <rect x="174" y="84" width="26" height="114" rx="4" fill="#ef8a2f" stroke-width="4"/>
+          <rect x="208" y="146" width="26" height="52" rx="4" fill="#d9533d" stroke-width="4"/>
+          <rect x="242" y="118" width="26" height="80" rx="4" fill="#d6a519" stroke-width="4"/>
+          <path d="M96 198 H274" fill="none"/>
+          <path d="M112 232 H150 M112 246 H214" fill="none" stroke-width="4" stroke-opacity=".5"/>
+          <path d="M112 132 L148 112 L180 126 L214 92 L256 110" fill="none" stroke-width="4"/>
+          <circle cx="112" cy="132" r="5" fill="#fff" stroke-width="3.5"/><circle cx="148" cy="112" r="5" fill="#fff" stroke-width="3.5"/><circle cx="180" cy="126" r="5" fill="#fff" stroke-width="3.5"/><circle cx="214" cy="92" r="5" fill="#fff" stroke-width="3.5"/><circle cx="256" cy="110" r="5" fill="#fff" stroke-width="3.5"/>
+          <rect x="68" y="66" width="28" height="12" rx="6" fill="#2a2017"/><rect x="68" y="106" width="28" height="12" rx="6" fill="#2a2017"/><rect x="68" y="146" width="28" height="12" rx="6" fill="#2a2017"/><rect x="68" y="186" width="28" height="12" rx="6" fill="#2a2017"/><rect x="68" y="226" width="28" height="12" rx="6" fill="#2a2017"/>
+          <g transform="translate(250 196) rotate(35)"><rect x="0" y="0" width="22" height="92" rx="4" fill="#f4c34d"/><polygon points="0,92 22,92 11,116" fill="#fbe6aa"/><polygon points="6,106 16,106 11,116" fill="#2a2017"/><rect x="0" y="0" width="22" height="14" rx="4" fill="#f6b3a8"/></g>
+        </g>
+        <g stroke="#2a2017" stroke-width="4" stroke-linecap="round" fill="none"><path d="M312 70 v20 M302 80 h20"/><path d="M42 96 v14 M35 103 h14"/></g>
+      </svg>
+    </div>
+  </div>
+  <div class="chips4">
+    <div class="chip"><b>10초</b><span>하루 입력</span></div>
+    <div class="chip"><b>5종</b><span>그래프</span></div>
+    <div class="chip"><b>2축</b><span>준비 + 지원 결과</span></div>
+    <div class="chip"><b>웹</b><span>폰 · PC</span></div>
+  </div>
+  <div class="docinfo">
+    <div><small>과제</small>취업 준비 정량 사이트</div>
+    <div><small>형태</small>웹페이지 (PPT 아님)</div>
+    <div><small>작성일</small>2026-11-19</div>
+    <div><small>이 페이지의 데이터</small>샘플 (가짜 회사)</div>
+  </div>
+</section>
+
+<!-- 01 조건 -->
+<section class="ch" id="req">
+  <div class="ch-head"><div class="num">01</div><h2>과제 조건과 해결</h2></div>
+  <p class="lead">조건 4개를 화면으로 풀었다.</p>
+  <div class="grid g4">
+    <div class="card req"><div class="cond"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="#4fae9c" stroke="#2a2017" stroke-width="3"/><path d="M7 13.5 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>불편 없이 쓴다</div>
+      <div class="sol"><h3>입력 10초</h3><div class="tags"><span class="pill o">활동 탭 1번</span><span class="pill o">시간 탭 1번</span><span class="pill">되돌리기</span></div></div></div>
+    <div class="card req"><div class="cond"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="#4fae9c" stroke="#2a2017" stroke-width="3"/><path d="M7 13.5 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>자주 접속한다</div>
+      <div class="sol"><h3>돌아올 이유 3개</h3><div class="tags"><span class="pill o">연속 입력일</span><span class="pill o">주간 목표</span><span class="pill">12주 달력</span></div></div></div>
+    <div class="card req"><div class="cond"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="#4fae9c" stroke="#2a2017" stroke-width="3"/><path d="M7 13.5 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>글은 적게, 그래프는 많이</div>
+      <div class="sol"><h3>그래프 5종</h3><div class="tags"><span class="pill o">막대</span><span class="pill o">도넛</span><span class="pill o">퍼널</span><span class="pill">달력</span><span class="pill">진행 링</span></div></div></div>
+    <div class="card req"><div class="cond"><svg viewBox="0 0 26 26"><circle cx="13" cy="13" r="11" fill="#4fae9c" stroke="#2a2017" stroke-width="3"/><path d="M7 13.5 l4 4 l8 -9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>PPT 대신 웹</div>
+      <div class="sol"><h3>웹페이지</h3><div class="tags"><span class="pill o">폰 화면</span><span class="pill o">PC 화면</span><span class="pill">한 줄 10단어 이하</span></div></div></div>
+  </div>
+</section>
+
+<!-- 02 써보기 -->
+<section class="ch" id="demo">
+  <div class="ch-head"><div class="num">02</div><h2>직접 써보기</h2></div>
+  <p class="lead">샘플 데이터로 눌러볼 수 있다. 새로고침하면 처음으로.</p>
+  <div class="demo-ctl">
+    <div class="seg" id="tabs">
+      <button class="on" data-h="today">오늘</button><button data-h="dash">대시보드</button><button data-h="apps">지원</button><button data-h="prefs">설정</button>
+    </div>
+    <div class="seg sp" id="size">
+      <button class="on" data-s="phone">폰</button><button class="pcb" data-s="pc">PC</button>
+    </div>
+  </div>
+  <div class="stage"><div class="frame" id="frame"><iframe id="demo-frame" src="demo.html#today" title="취업 준비 노트 샘플 데모"></iframe></div></div>
+  <p class="cap" style="text-align:center">활동과 시간을 눌러 기록하면,<br>대시보드에 바로 반영된다.</p>
+</section>
+
+<!-- 03 화면 -->
+<section class="ch" id="screens">
+  <div class="ch-head"><div class="num">03</div><h2>화면 4개</h2></div>
+  <p class="lead">첫 화면은 입력. 나머지는 보기.</p>
+  <div class="grid g4">
+    <div class="card wf"><svg viewBox="0 0 160 190"><rect x="4" y="4" width="152" height="182" rx="12" fill="#fff" stroke="#2a2017" stroke-width="4"/><rect x="14" y="14" width="132" height="44" rx="8" fill="#fffaf0" stroke="#2a2017" stroke-width="3"/><rect x="22" y="22" width="60" height="10" rx="5" fill="#ef8a2f"/><rect x="22" y="40" width="116" height="9" rx="4.5" fill="#fff" stroke="#2a2017" stroke-width="2.5"/><rect x="22" y="40" width="80" height="9" rx="4.5" fill="#4fae9c" stroke="#2a2017" stroke-width="2.5"/><g stroke="#2a2017" stroke-width="3"><rect x="14" y="68" width="62" height="34" rx="8" fill="#fff"/><rect x="84" y="68" width="62" height="34" rx="8" fill="#f4c34d"/><rect x="14" y="108" width="62" height="34" rx="8" fill="#fff"/><rect x="84" y="108" width="62" height="34" rx="8" fill="#fff"/></g><g stroke="#2a2017" stroke-width="2.5"><rect x="20" y="152" width="30" height="22" rx="6" fill="#fff"/><rect x="56" y="152" width="30" height="22" rx="6" fill="#fff"/><rect x="92" y="152" width="30" height="22" rx="6" fill="#fff"/></g></svg>
+      <h3>오늘</h3><p>활동 5개, 시간 버튼</p></div>
+    <div class="card wf"><svg viewBox="0 0 160 190"><rect x="4" y="4" width="152" height="182" rx="12" fill="#fff" stroke="#2a2017" stroke-width="4"/><g stroke="#2a2017" stroke-width="3"><rect x="14" y="14" width="30" height="22" rx="6" fill="#f4c34d"/><rect x="48" y="14" width="30" height="22" rx="6" fill="#fff"/><rect x="82" y="14" width="30" height="22" rx="6" fill="#fff"/><rect x="116" y="14" width="30" height="22" rx="6" fill="#f4c34d"/></g><g stroke="#2a2017" stroke-width="3"><rect x="20" y="86" width="14" height="40" rx="2" fill="#4f7cac"/><rect x="40" y="62" width="14" height="64" rx="2" fill="#5aa17f"/><rect x="60" y="76" width="14" height="50" rx="2" fill="#ef8a2f"/><rect x="80" y="54" width="14" height="72" rx="2" fill="#d9533d"/><rect x="100" y="70" width="14" height="56" rx="2" fill="#d6a519"/></g><circle cx="38" cy="156" r="18" fill="none" stroke="#2a2017" stroke-width="3"/><circle cx="38" cy="156" r="12" fill="none" stroke="#ef8a2f" stroke-width="8" stroke-dasharray="30 46"/><g stroke="#2a2017" stroke-width="2.5"><rect x="70" y="146" width="70" height="8" rx="4" fill="#9ccbe0"/><rect x="70" y="160" width="46" height="8" rx="4" fill="#9ccbe0"/></g></svg>
+      <h3>대시보드</h3><p>그래프 5종</p></div>
+    <div class="card wf"><svg viewBox="0 0 160 190"><rect x="4" y="4" width="152" height="182" rx="12" fill="#fff" stroke="#2a2017" stroke-width="4"/><rect x="14" y="14" width="132" height="34" rx="8" fill="#fffaf0" stroke="#2a2017" stroke-width="3"/><rect x="20" y="22" width="60" height="8" rx="4" fill="#d9d0bd"/><rect x="104" y="36" width="36" height="8" rx="4" fill="#ef8a2f"/><g stroke="#2a2017" stroke-width="3"><rect x="14" y="58" width="132" height="58" rx="10" fill="#fff"/><rect x="14" y="124" width="132" height="58" rx="10" fill="#fff"/></g><g stroke="#2a2017" stroke-width="2.5"><rect x="22" y="86" width="26" height="8" rx="4" fill="#4fae9c"/><rect x="52" y="86" width="26" height="8" rx="4" fill="#4fae9c"/><rect x="82" y="86" width="26" height="8" rx="4" fill="#fff"/><rect x="112" y="86" width="26" height="8" rx="4" fill="#fff"/><rect x="22" y="152" width="26" height="8" rx="4" fill="#4fae9c"/><rect x="52" y="152" width="26" height="8" rx="4" fill="#d9533d"/><rect x="82" y="152" width="26" height="8" rx="4" fill="#fff"/><rect x="112" y="152" width="26" height="8" rx="4" fill="#fff"/></g><rect x="22" y="66" width="50" height="9" rx="4.5" fill="#2a2017" fill-opacity=".7"/><rect x="22" y="132" width="50" height="9" rx="4.5" fill="#2a2017" fill-opacity=".7"/></svg>
+      <h3>지원</h3><p>회사별 4단계 진행</p></div>
+    <div class="card wf"><svg viewBox="0 0 160 190"><rect x="4" y="4" width="152" height="182" rx="12" fill="#fff" stroke="#2a2017" stroke-width="4"/><g stroke="#2a2017" stroke-width="3"><circle cx="24" cy="34" r="8" fill="#4f7cac"/><circle cx="24" cy="62" r="8" fill="#5aa17f"/><circle cx="24" cy="90" r="8" fill="#ef8a2f"/><circle cx="24" cy="118" r="8" fill="#d9533d"/><circle cx="24" cy="146" r="8" fill="#d6a519"/><rect x="40" y="24" width="104" height="20" rx="8" fill="#fff"/><rect x="40" y="52" width="104" height="20" rx="8" fill="#fff"/><rect x="40" y="80" width="104" height="20" rx="8" fill="#fff"/><rect x="40" y="108" width="104" height="20" rx="8" fill="#fff"/><rect x="40" y="136" width="104" height="20" rx="8" fill="#fff"/></g><rect x="14" y="164" width="60" height="16" rx="8" fill="#ef8a2f" stroke="#2a2017" stroke-width="3"/></svg>
+      <h3>설정</h3><p>이름, 목표, 백업</p></div>
+  </div>
+</section>
+
+<!-- 04 매일 흐름 -->
+<section class="ch" id="daily">
+  <div class="ch-head"><div class="num">04</div><h2>매일 10초 흐름</h2></div>
+  <p class="lead">입력은 가볍게. 돌아올 이유는 눈에 보이게.</p>
+  <div class="flow">
+    <div class="st"><b>1</b><strong>열기</strong><span>첫 화면이 입력</span></div><div class="arrow">→</div>
+    <div class="st"><b>2</b><strong>활동 탭</strong><span>5개 중 하나</span></div><div class="arrow">→</div>
+    <div class="st"><b>3</b><strong>시간 탭</strong><span>30분 · 1시간 · 2시간…</span></div><div class="arrow">→</div>
+    <div class="st end"><b>4</b><strong>끝</strong><span>그래프에 바로 반영</span></div>
+  </div>
+  <div class="grid g3" style="margin-top:24px">
+    <div class="card hook"><svg viewBox="0 0 84 84"><path d="M42 8 C50 24 66 30 62 52 C60 66 50 74 42 74 C32 74 22 66 22 52 C22 38 34 34 36 22 C38 28 40 32 44 30 C46 22 44 14 42 8 Z" fill="#ef8a2f" stroke="#2a2017" stroke-width="4" stroke-linejoin="round"/><path d="M42 40 C46 48 54 50 52 60 C50 66 46 68 42 68 C36 68 32 64 32 58 C32 52 40 50 42 40 Z" fill="#f4c34d" stroke="#2a2017" stroke-width="3" stroke-linejoin="round"/></svg><h3>연속 입력일</h3><p>끊기지 않게 이어 간다</p></div>
+    <div class="card hook"><svg viewBox="0 0 84 84"><circle cx="42" cy="42" r="30" fill="none" stroke="#2a2017" stroke-width="12"/><circle cx="42" cy="42" r="30" fill="none" stroke="#4fae9c" stroke-width="6" stroke-dasharray="130 190" transform="rotate(-90 42 42)" stroke-linecap="round"/><text x="42" y="48" text-anchor="middle" font-family="Jua" font-size="18" fill="#2a2017">72%</text></svg><h3>주간 목표</h3><p>이번 주 달성률</p></div>
+    <div class="card hook"><svg viewBox="0 0 84 84"><g stroke="#2a2017" stroke-width="3"><rect x="8" y="8" width="16" height="16" rx="4" fill="#b85a10"/><rect x="28" y="8" width="16" height="16" rx="4" fill="#ef8a2f"/><rect x="48" y="8" width="16" height="16" rx="4" fill="#fff"/><rect x="8" y="28" width="16" height="16" rx="4" fill="#f7c27d"/><rect x="28" y="28" width="16" height="16" rx="4" fill="#b85a10"/><rect x="48" y="28" width="16" height="16" rx="4" fill="#b85a10"/><rect x="68" y="28" width="12" height="16" rx="4" fill="#ef8a2f"/><rect x="8" y="48" width="16" height="16" rx="4" fill="#fff"/><rect x="28" y="48" width="16" height="16" rx="4" fill="#ef8a2f"/><rect x="48" y="48" width="16" height="16" rx="4" fill="#b85a10"/><rect x="68" y="8" width="12" height="16" rx="4" fill="#fbe0bf"/></g></svg><h3>12주 달력</h3><p>빈칸이 보이면 채우고 싶다</p></div>
+  </div>
+</section>
+
+<!-- 05 지표 -->
+<section class="ch" id="metrics">
+  <div class="ch-head"><div class="num">05</div><h2>숫자 정의</h2></div>
+  <p class="lead">정량 사이트라서 계산식을 밝힌다.</p>
+  <div class="grid g2">
+    <div class="card fm"><h3>투입 시간</h3><div class="eq">활동별 입력 시간의 합<br>(하루 · 주 · 4주)</div>
+      <div class="mini"><i style="width:28%;background:#4f7cac"></i><i style="width:17%;background:#5aa17f"></i><i style="width:26%;background:#ef8a2f"></i><i style="width:20%;background:#d9533d"></i><i style="width:9%;background:#d6a519"></i></div>
+      <p class="cap">활동 비중 = 활동별 시간 ÷ 최근 4주 전체</p></div>
+    <div class="card fm"><h3>연속 입력일</h3><div class="eq">오늘부터 거꾸로<br>기록이 있는 날을 센다</div>
+      <p class="ex">오늘이 비어 있으면 <i>어제부터</i> 센다. 하루 쉰 날 바로 0이 되지 않게.</p></div>
+    <div class="card fm"><h3>단계 통과율</h3><div class="eq">통과한 건 ÷ 결과 난 건<br>(대기 중인 건 제외)</div>
+      <p class="ex">예: 서류 결과가 난 7건 중 6건 통과 → <i>86%</i></p></div>
+    <div class="card fm"><h3>주간 목표 달성률</h3><div class="eq">이번 주 투입 ÷ 주간 목표<br>(월~일, 기본 15시간)</div>
+      <p class="ex">목표는 설정에서 바꿀 수 있다. <i>15시간은 임의 기본값.</i></p></div>
+  </div>
+</section>
+
+<!-- 06 저장 -->
+<section class="ch" id="data">
+  <div class="ch-head"><div class="num">06</div><h2>데이터 저장</h2></div>
+  <p class="lead">입력 → 내 계정 저장 → 모든 그래프.</p>
+  <div class="dflow">
+    <div class="box"><h3>입력</h3><div class="it">활동 + 시간</div><div class="it">지원 결과</div><div class="it">설정</div></div>
+    <div class="arrow">→</div>
+    <div class="box db"><h3>내 계정 저장소</h3><div class="it">설정 1개</div><div class="it">지원 목록 1개</div><div class="it">월별 기록 N개</div><p class="cap" style="margin-top:6px">나만 읽을 수 있는 영역</p></div>
+    <div class="arrow">→</div>
+    <div class="box"><h3>그래프 5종</h3><div class="it">막대 · 도넛 · 퍼널</div><div class="it">달력 · 진행 링</div><p class="cap" style="margin-top:6px">폰과 PC가 같은 데이터</p></div>
+  </div>
+  <p class="cap" style="text-align:center">같은 계정으로 로그인한 기기끼리 데이터가 같다.<br>로그인이 없으면 이 기기에만 임시 저장.</p>
+</section>
+
+<!-- 07 결정 -->
+<section class="ch" id="decide">
+  <div class="ch-head"><div class="num">07</div><h2>설계 결정</h2></div>
+  <p class="lead">질문을 하나씩 받아 정했다.</p>
+  <div class="tl">
+    <div class="it me"><b>1</b><span>중심 숫자</span><strong>내 취업 활동 기록</strong></div>
+    <div class="it me"><b>2</b><span>기록 축</span><strong>지원 결과 + 준비 투입</strong></div>
+    <div class="it me"><b>3</b><span>기기</span><strong>폰과 PC 둘 다</strong></div>
+    <div class="it me"><b>4</b><span>저장</span><strong>Claude 아티팩트</strong></div>
+    <div class="it me"><b>5</b><span>매일 입력</span><strong>활동별 시간만</strong></div>
+    <div class="it me"><b>6</b><span>활동 종류</span><strong>5개로 나눔</strong></div>
+    <div class="it"><b>7</b><span>지원 단계</span><strong>서류·과제·면접·최종</strong></div>
+    <div class="it"><b>8</b><span>주간 목표</span><strong>기본 15시간</strong></div>
+    <div class="it"><b>9</b><span>첫 화면</span><strong>오늘 입력</strong></div>
+    <div class="it"><b>10</b><span>디자인</span><strong>노트 느낌, 큰 버튼</strong></div>
+  </div>
+  <div class="legend"><span class="y">직접 고른 결정</span><span>제안대로 정한 결정</span></div>
+</section>
+
+<!-- 08 한계 -->
+<section class="ch" id="limits">
+  <div class="ch-head"><div class="num">08</div><h2>확인한 것과 남은 것</h2></div>
+  <p class="lead">확인 못 한 것은 숨기지 않는다.</p>
+  <div class="grid g2">
+    <div class="card ck"><h3>확인함</h3><ul>
+      <li>입력·되돌리기·지원 관리 자동 시나리오 25개 통과 (가짜 저장소)</li>
+      <li>폰 폭과 PC 폭 화면 확인</li>
+      <li>저장소 연결 확인 (게시본에서 빈 저장소 조회)</li>
+      <li>이 페이지의 데모는 샘플 데이터로 동작</li></ul></div>
+    <div class="card ck q"><h3>아직 못 함</h3><ul>
+      <li>실제 폰 앱에서 열어 보기</li>
+      <li>입력 10초는 탭 횟수 기준 추정 (시간 측정 안 함)</li>
+      <li>폰과 PC 동기화 실사용 확인</li>
+      <li>알림, 면접 일정 같은 기능</li>
+      <li>시장 데이터(공고 수 등) 비교</li></ul></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><h4>이 페이지에 대해</h4>
+      <p>제출용 소개 페이지. 실제 기록용 앱은 로그인한 본인만 쓰는 비공개 페이지.</p>
+      <p>데모의 회사 이름과 기록은 모두 가짜 샘플.</p></div>
+    <div><h4>구성</h4>
+      <p>index.html (소개) · demo.html (샘플 데모)</p>
+      <p>작성 2026-11-19</p></div>
+  </div>
+</footer>
+
+<script>
+// 데모 탭 · 크기 전환 (iframe 주소의 # 부분만 바꿔서 같은 데모를 다른 화면으로)
+(function(){
+  var f=document.getElementById('demo-frame'),fr=document.getElementById('frame');
+  document.getElementById('tabs').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].forEach.call(this.children,function(x){x.classList.remove('on')});b.classList.add('on');
+    f.src='demo.html#'+b.getAttribute('data-h');
+  });
+  document.getElementById('size').addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b)return;
+    [].forEach.call(this.children,function(x){x.classList.remove('on')});b.classList.add('on');
+    fr.classList.toggle('pc',b.getAttribute('data-s')==='pc');
+  });
+  // 상단 내비 현재 위치
+  var links=[].slice.call(document.querySelectorAll('#nav a')),map={};
+  links.forEach(function(a){map[a.getAttribute('href').slice(1)]=a});
+  var ids=Object.keys(map).map(function(i){return document.getElementById(i)}).filter(Boolean);
+  function on(){var y=window.scrollY+120,cur=ids[0];ids.forEach(function(s){if(s.offsetTop<=y)cur=s});links.forEach(function(a){a.classList.remove('on')});if(cur&&map[cur.id])map[cur.id].classList.add('on')}
+  window.addEventListener('scroll',on,{passive:true});on();
+})();
+</script>
+</body>
+</html>
